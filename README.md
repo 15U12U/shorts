@@ -1,3 +1,4 @@
 # Shorts
 
-- [Powershell Modules](powershell-modules.md)
+- [Powershell modules](powershell-modules.md)
+- [Bash functions](.bash_functions)
