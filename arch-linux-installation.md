@@ -133,5 +133,30 @@ See also [Partitioning#Example layouts](https://wiki.archlinux.org/title/Partiti
 fdisk /dev/the_disk_to_be_partitioned
 ```
 2. Enter `g` to create a new empty GPT partition table
-3. Enter `n` to add a new partition
+```bash
+Command (m for help) g
+```
+4. Enter `n` to add a new partition
+```bash
+Command (m for help) n
+```
+5. Press `Enter` to select the default value
+```bash
+Partition number (1-128, default 1):
+```
+5. Press `Enter` to select the default value
+```bash
+First sector (2048-500118158, default 2048):
+```
+6. Enter the desired value based on the size of the partition you want to create. (ex: 1 GiB)
+```bash
+Last sector, +/-sectors or +/-size{K,M,G,T,P} (2048-500118158, default 500118158): +1G
+```
+7. 
+8. Repeat the steps from (3.) to (6.) based on your requirement
 
+| Mount Point | Partition                            | Partition Type               | Recommended Size        |
+| :---------- | :----------------------------------- | :--------------------------- | :---------------------- |
+| `/boot`     | `/dev/<the_disk_to_be_partitioned>1` | EFI system partition ()      | 1 GiB                   |
+| `[SWAP]`    | `/dev/<the_disk_to_be_partitioned>2` | Linux swap ()                | 1 GiB                   |
+| `/`         | `/dev/<the_disk_to_be_partitioned>3` | Linux x86-64 root ()         | Remainder of the device |
