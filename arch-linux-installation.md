@@ -114,5 +114,24 @@ fdisk /dev/<the_disk_to_be_partitioned>
 > - If the disk from which you want to boot [already has an EFI system partition](https://wiki.archlinux.org/title/EFI_system_partition#Check_for_an_existing_partition), do not create another one, but use the existing partition instead.
 > - [Swap](https://wiki.archlinux.org/title/Swap) space can be set on a [swap file](https://wiki.archlinux.org/title/Swap_file) for file systems supporting it.
 
-## 5.1. Using fdisk
+## 5.1. Example layouts
+
+### UEFI with GPT
+| Mount Point     | Partition                   | Partition Type                                                                | Recommended Size        |
+| :-------------- | :-------------------------- | :---------------------------------------------------------------------------- | :---------------------- |
+| `/mnt/boot`[^1] | `/dev/efi_system_partition` | [EFI system partition](https://wiki.archlinux.org/title/EFI_system_partition) | At least 300 MiB        |
+| `[SWAP]`        | `/dev/swap_partition`       | Linux swap                                                                    | More than 512 MiB       |
+| `/mnt`          | `/dev/root_partition`       | Linux x86-64 root (/)                                                         | Remainder of the device |
+
+[^1]: [Other mount points](https://wiki.archlinux.org/title/EFI_system_partition#Typical_mount_points), such as `/mnt/efi`, are possible, provided that the used boot loader is capable of loading the kernel and initramfs images from the root volume. See the warning in [Arch boot process#Boot loader](https://wiki.archlinux.org/title/Arch_boot_process#Boot_loader).
+
+See also [Partitioning#Example layouts](https://wiki.archlinux.org/title/Partitioning#Example_layouts).
+
+## 5.2. Using fdisk
+1. Select the appropriate disk
+```bash
+fdisk /dev/the_disk_to_be_partitioned
+```
+2. Enter `g` to create a new empty GPT partition table
+3. Enter `n` to add a new partition
 
