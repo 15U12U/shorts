@@ -4,5 +4,6 @@
 - [Bash functions](.bash_functions)
 - [Revamped Linux Commands](revamped-linux-cli.md)
 - [SNMP Configuration Guide](snmp-configuration.md)
+- [LVM Configuration Guide](lvm-configuration.md)
 - [NFS Configuration Guide](nfs-configuration.md)
 
