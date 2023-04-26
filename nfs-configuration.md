@@ -16,6 +16,7 @@ $ sudo systemctl enable nfs-server.service
 ```
 
 ### Creating a seperate LVM for the NFS share (Note: Please refer to the [LVM Configuration Guide](lvm-configuration.md))
+---
 
 ## Creating a NFS Share
 ### Create a new directory for the mount point
@@ -24,21 +25,12 @@ $ sudo mkdir -p /mnt/nfs_share
 # mkdir -p /mnt/nfs_share
 ```
 
-### Mount the Formatted 'Logical Volume (LV)'
-#### Append one of the following configuration lines to '/etc/fstab' (Note: Change the mounted device accordingly)
-```
-/dev/<volume_group_name>/<logical_volume_name>  /mnt/nfs_share  xfs   defaults  0 0
-UUID=<Device_UUID>  /mnt/nfs_share  xfs   defaults  0 0
-```
-
-
-
 ### Provide R,W,E permissions to the directory for all users
 ```
 $ sudo chmod -R 777 /mnt/nfs_share
 # chmod -R 777 /mnt/nfs_share
 ```
-
+---
 ## Allow services from Firewall
 ```
 $ sudo firewall-cmd --permanent --add-service=nfs
