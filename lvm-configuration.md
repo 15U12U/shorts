@@ -45,6 +45,16 @@ $ sudo pvcreate /dev/sdc1
 $ sudo pvscan; sudo pvs; sudo pvdisplay
 # pvscan; pvs; pvdisplay
 ```
+> **Note**  
+> Removing a 'Physical Volume (PV)'
+```
+$ sudo pvremove /dev/<partition_name>
+# pvremove /dev/<partition_name>
+
+#### Example ###
+$ sudo pvremove /dev/sdc1
+# pvremove /dev/sdc1
+```
 ---
 ### Create a new 'Volume Group (VG)' using the newly created 'Physical Volume (PV)'
 ```
@@ -89,6 +99,74 @@ $ sudo mkfs.ext4 /dev/vg-pool-1/lv-linear
 # mkfs.ext4 /dev/vg-pool-1/lv-linear
 ```
 ---
+### Mount the Formatted 'Logical Volume (LV)'
+#### Append one of the following configuration lines to '/etc/fstab' (Note: Change the mounted device accordingly)
+```
+/dev/<volume_group_name>/<logical_volume_name>  /mnt/nfs_share  xfs   defaults  0 0
+UUID=<Device_UUID>  /mnt/nfs_share  xfs   defaults  0 0
+```
+> **Note**  
+> To get the correct UUID of the LV
+```
+$ sudo blkid /dev/<volume_group_name>/<logical_volume_name>
+# blkid /dev/<volume_group_name>/<logical_volume_name>
+
+### Example ###
+$ sudo blkid /dev/vg-pool-1/lv-linear
+# blkid /dev/vg-pool-1/lv-linear
+```
+
+#### Verify the mount is successful
+```
+mount -a
+```
+---
 
 ## Extending a LVM
+### Add a new 'Physical Volume (PV)' to the existing 'Volume Group (VG)'
+```
+$ sudo vgextend <existing_volume_group_name> /dev/<partition_name>
+# vgextend <existing_volume_group_name> /dev/<partition_name>
+```
+#### Example
+```
+$ sudo vgextend vg-pool-1 /dev/sdd1
+# vgextend vg-pool-1 /dev/sdd1
+```
+> **Note**  
+> Reducing a 'Volume Group (VG)'
+```
+$ sudo vgreduce <existing_volume_group_name> /dev/<partition_name>
+# vgreduce <existing_volume_group_name> /dev/<partition_name>
+
+### Example ###
+$ sudo vgreduce vg-pool-1 /dev/sdd1
+# vgreduce vg-pool-1 /dev/sdd1
+```
+> **Note**  
+> Removing a 'Volume Group (VG)'
+```
+$ sudo vgremove <existing_volume_group_name>
+# vgremove <existing_volume_group_name>
+
+### Example ###
+$ sudo vgremove vg-pool-1
+# vgremove vg-pool-1
+```
+---
+
+## Removing a LVM
+```
+$ sudo lvremove <volume_group_name>/<logical_volume_name>
+# lvremove <volume_group_name>/<logical_volume_name>
+```
+#### Example
+```
+$ sudo lvremove vg-pool-1/lv-linear
+# lvremove vg-pool-1/lv-linear
+```
+---
+
+
+
 
