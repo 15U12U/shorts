@@ -118,18 +118,30 @@ $ sudo blkid /dev/vg-pool-1/lv-linear
 
 #### Verify the mount is successful
 ```
-mount -a
+$ sudo mount -a
+# mount -a
 ```
 ---
 
 ## Extending a LVM
-### Add a new 'Physical Volume (PV)' to the existing 'Volume Group (VG)'
+### Verify the available storage space in a 'Volume Group (VG)'
 ```
-$ sudo vgextend <existing_volume_group_name> /dev/<partition_name>
-# vgextend <existing_volume_group_name> /dev/<partition_name>
+$ sudo vgs -S vgname=<volume_group_name> -o vg_free
+# vgs -S vgname=<volume_group_name> -o vg_free
 ```
 #### Example
 ```
+$ sudo vgs -S vgname=vg-pool-1 -o vg_free
+# vgs -S vgname=vg-pool-1 -o vg_free
+```
+
+> **Note**  
+> Extending a 'Volume Group (VG)'
+```
+$ sudo vgextend <existing_volume_group_name> /dev/<partition_name>
+# vgextend <existing_volume_group_name> /dev/<partition_name>
+
+#### Example ###
 $ sudo vgextend vg-pool-1 /dev/sdd1
 # vgextend vg-pool-1 /dev/sdd1
 ```
@@ -153,6 +165,135 @@ $ sudo vgremove <existing_volume_group_name>
 $ sudo vgremove vg-pool-1
 # vgremove vg-pool-1
 ```
+
+### Extending a 'Logical Volume (LV)'
+```
+$ sudo lvextend -l +<FREE_LE> /dev/<volume_group_name>/<logical_volume_name>
+# lvextend -l +<FREE_LE> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvextend -L <desired_size> /dev/<volume_group_name>/<logical_volume_name>
+# lvextend -L <desired_size> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvextend -L +<additional_size> /dev/<volume_group_name>/<logical_volume_name>
+# lvextend -L +<additional_size> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvextend -L +100%FREE /dev/<volume_group_name>/<logical_volume_name>
+# lvextend -L +100%FREE /dev/<volume_group_name>/<logical_volume_name>
+```
+#### Example
+```
+## Increase the 'lv-linear' LV size with available Logical Extents (-l/--extents)
+$ sudo lvextend -l +4720 /dev/vg-pool-1/lv-linear
+# lvextend -l +4720 /dev/vg-pool-1/lv-linear
+
+## Increase the 'lv-linear' LV size to 12 GB (-L/--size) [Assumption: 'lv-linear' LV's original size before extention is less than 12 GB]
+$ sudo lvextend -L 12G /dev/vg-pool-1/lv-linear
+# lvextend -L 12G /dev/vg-pool-1/lv-linear
+
+## Increase the 'lv-linear' LV size by 1 GB (-L/--size)
+$ sudo lvextend -L +1G /dev/vg-pool-1/lv-linear
+# lvextend -L +1G /dev/vg-pool-1/lv-linear
+
+## Increase the 'lv-linear' LV size to fill all of the unallocated space in the 'vg-pool-1' VG (-L/--size)
+$ sudo lvextend -L +100%FREE /dev/vg-pool-1/lv-linear
+# lvextend -L +100%FREE /dev/vg-pool-1/lv-linear
+
+## Increase the 'lv-linear' LV size and resize the underlying file system with a single command (-r/--resizefs)
+$ sudo lvextend -r -L 10G /dev/vg-pool-1/lv-linear
+# lvextend -r -L 10G /dev/vg-pool-1/lv-linear
+```
+> **Note**  
+> If the (-r/--resizefs) option was not used previously, the filesystem must be resized
+```
+$ sudo resize2fs /dev/<volume_group_name>/<logical_volume_name>
+# resize2fs /dev/<volume_group_name>/<logical_volume_name>
+
+### Example ###
+$ sudo resize2fs /dev/vg-pool-1/lv-linear
+# resize2fs /dev/vg-pool-1/lv-linear
+```
+---
+
+## Reducing a LVM
+```
+$ sudo lvreduce -l -<FREE_LE> /dev/<volume_group_name>/<logical_volume_name>
+# lvreduce -l -<FREE_LE> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvreduce -L <desired_size> /dev/<volume_group_name>/<logical_volume_name>
+# lvreduce -L <desired_size> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvreduce -L -<reducing_size> /dev/<volume_group_name>/<logical_volume_name>
+# lvreduce -L -<reducing_size> /dev/<volume_group_name>/<logical_volume_name>
+```
+#### Example
+```
+## Shrink the 'lv-linear' LV size by specific Logical Extents (-l/--extents)
+$ sudo lvreduce -l -4720 /dev/vg-pool-1/lv-linear
+# lvreduce -l -4720 /dev/vg-pool-1/lv-linear
+
+## Shrink the 'lv-linear' LV size to 12 GB (-L/--size) [Assumption: 'lv-linear' LV's original size before reduction is more than 12 GB]
+$ sudo lvreduce -L 12G /dev/vg-pool-1/lv-linear
+# lvreduce -L 12G /dev/vg-pool-1/lv-linear
+
+## Shrink the 'lv-linear' LV size by 1 GB  (-L/--size)
+$ sudo lvreduce -L -1G /dev/vg-pool-1/lv-linear
+# lvreduce -L -1G /dev/vg-pool-1/lv-linear
+
+## Shrink the 'lv-linear' LV size and resize the underlying file system with a single command (-r/--resizefs)
+$ sudo lvreduce -r -L 10G /dev/vg-pool-1/lv-linear
+# lvreduce -r -L 10G /dev/vg-pool-1/lv-linear
+```
+> **Note**  
+> If the (-r/--resizefs) option was not used previously, the filesystem must be resized
+```
+$ sudo resize2fs /dev/<volume_group_name>/<logical_volume_name>
+# resize2fs /dev/<volume_group_name>/<logical_volume_name>
+
+### Example ###
+$ sudo resize2fs /dev/vg-pool-1/lv-linear
+# resize2fs /dev/vg-pool-1/lv-linear
+```
+---
+
+## Resizing a LVM
+```
+$ sudo lvresize -l (+/-)<FREE_LE> /dev/<volume_group_name>/<logical_volume_name>
+# lvresize -l (+/-)<FREE_LE> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvresize -L <desired_size> /dev/<volume_group_name>/<logical_volume_name>
+# lvresize -L <desired_size> /dev/<volume_group_name>/<logical_volume_name>
+
+$ sudo lvresize -L (+/-)<reducing_size> /dev/<volume_group_name>/<logical_volume_name>
+# lvresize -L (+/-)<reducing_size> /dev/<volume_group_name>/<logical_volume_name>
+```
+#### Example
+```
+## Shrink the 'lv-linear' LV size by specific Logical Extents (-l/--extents)
+$ sudo lvresize -l -4720 /dev/vg-pool-1/lv-linear
+# lvresize -l -4720 /dev/vg-pool-1/lv-linear
+
+## Shrink/Increase the 'lv-linear' LV size to 12 GB (-L/--size) [Assumption: 'lv-linear' LV's original size before reduction is more than 12 GB/before extention is less than 12 GB]
+$ sudo lvresize -L 12G /dev/vg-pool-1/lv-linear
+# lvresize -L 12G /dev/vg-pool-1/lv-linear
+
+## Increase the 'lv-linear' LV size by 1 GB  (-L/--size)
+$ sudo lvresize -L +1G /dev/vg-pool-1/lv-linear
+# lvresize -L +1G /dev/vg-pool-1/lv-linear
+
+## Shrink/increase the 'lv-linear' LV size and resize the underlying file system with a single command (-r/--resizefs)
+$ sudo lvresize -r -L 10G /dev/vg-pool-1/lv-linear
+# lvresize -r -L 10G /dev/vg-pool-1/lv-linear
+```
+> **Note**  
+> If the (-r/--resizefs) option was not used previously, the filesystem must be resized
+```
+$ sudo resize2fs /dev/<volume_group_name>/<logical_volume_name>
+# resize2fs /dev/<volume_group_name>/<logical_volume_name>
+
+### Example ###
+$ sudo resize2fs /dev/vg-pool-1/lv-linear
+# resize2fs /dev/vg-pool-1/lv-linear
+```
 ---
 
 ## Removing a LVM
@@ -166,7 +307,3 @@ $ sudo lvremove vg-pool-1/lv-linear
 # lvremove vg-pool-1/lv-linear
 ```
 ---
-
-
-
-
