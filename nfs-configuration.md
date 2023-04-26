@@ -15,69 +15,20 @@ $ sudo systemctl enable nfs-server.service
 # systemctl enable nfs-server.service
 ```
 
+### Creating a seperate LVM for the NFS share (Note: Please refer to the [LVM Configuration Guide](lvm-configuration.md))
 
 ## Creating a NFS Share
-### Create a new directory
+### Create a new directory for the mount point
 ```
 $ sudo mkdir -p /mnt/nfs_share
 # mkdir -p /mnt/nfs_share
 ```
 
-### Creating a seperate volume as the NFS share (Note: This is optional)
-##### Configure the physical volume suitable for Logical Volume creation
+### Mount the Formatted 'Logical Volume (LV)'
+#### Append one of the following configuration lines to '/etc/fstab' (Note: Change the mounted device accordingly)
 ```
-## Identify the correct physical volume
-$ sudo fdisk -l
-# fdisk -l
-
-## Format the physical volume
-$ sudo fdisk /dev/<device_name>
-# fdisk /dev/<device_name>
-### Example
-$ sudo fdisk /dev/sdc
-# fdisk /dev/sdc
-
-## Create a new primary partition and change partiton type to Linux LVM
-Command (m for help): n
-Select (default p): p
-Command (m for help): t
-Hex Code: 8e
-Command (m for help): p
-Command (m for help): w
-
-## Create a new 'Physical Volume (PV)' using the newly created partition
-$ sudo pvcreate /dev/<partition_name>
-# pvcreate /dev/<partition_name>
-### Example
-$ sudo pvcreate /dev/sdc1
-# pvcreate /dev/sdc1
-
-
-## Create a new 'Volume Group (VG)' using the new created 'Physical Volume (PV)'
-$ sudo vgcreate <volume_group_name> /dev/<partition_name>
-# vgcreate <volume_group_name> /dev/<partition_name>
-### Example
-$ sudo vgcreate vg-pool-1 /dev/sdc1
-# vgcreate vg-pool-1 /dev/sdc1
-
-## Create a new linear 'Logical Volume (LV)' from the newly created 'Volume Group (VG)'
-$ sudo lvcreate -L 
-```
-
-
-
-#### Initialize the physical volume for use by LVM
-```
-$ sudo pvcreate /dev/<device_name>
-# pvcreate /dev/<device_name>
-```
-
-
-
-### Append the following configuration details to '/etc/fstab' (Note: Change the mounted device accordingly)
-```
-/dev/<device_name>  /mnt/nfs_share  xfs   defaults  0 0
-UUID=<device_UUID>  /mnt/nfs_share  xfs   defaults  0 0
+/dev/<volume_group_name>/<logical_volume_name>  /mnt/nfs_share  xfs   defaults  0 0
+UUID=<Device_UUID>  /mnt/nfs_share  xfs   defaults  0 0
 ```
 
 
