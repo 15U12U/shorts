@@ -19,6 +19,14 @@ $ sudo systemctl enable --now nfs-server.service
 ```
 ---
 
+## Disable NFSv3 if required
+### Edit the '/etc/nfs.conf' file as follows
+```
+[nfsd]
+vers3=no
+```
+---
+
 ## Creating a seperate LVM for the NFS share (Note: Please refer to the [LVM Configuration Guide](lvm-configuration.md))
 ---
 
