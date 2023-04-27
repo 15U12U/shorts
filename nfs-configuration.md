@@ -1,37 +1,69 @@
 # Server-side Configuration
-## NFS Service
+## Configuring the NFS Service
 ### Installing NFS Service
-#### CentOS / Fedora / Rocky Linux / Oracle Linux / Red hat Enterprise Linux
+#### RHEL-based Systems (CentOS / Fedora / Rocky Linux / Oracle Linux / Alma Linux)
 ```
 $ sudo dnf install -y nfs-utils
 # dnf install -y nfs-utils
 ```
-
-### Enabling/Starting NFS Service
+#### Debian-based Systems (Ubuntu / Kubuntu / Linux Mint)
 ```
-$ sudo systemctl start nfs-server.service
-$ sudo systemctl enable nfs-server.service
-# systemctl start nfs-server.service
-# systemctl enable nfs-server.service
+$ sudo apt install -y nfs-kernel-server
+# apt install -y nfs-kernel-server
 ```
+---
+## Enable and Start NFS Service
+```
+$ sudo systemctl enable --now nfs-server.service
+# systemctl enable --now nfs-server.service
+```
+---
 
-### Creating a seperate LVM for the NFS share (Note: Please refer to the [LVM Configuration Guide](lvm-configuration.md))
+## Creating a seperate LVM for the NFS share (Note: Please refer to the [LVM Configuration Guide](lvm-configuration.md))
 ---
 
 ## Creating a NFS Share
 ### Create a new directory for the mount point
 ```
-$ sudo mkdir -p /mnt/nfs_share
-# mkdir -p /mnt/nfs_share
+$ sudo mkdir -p /mnt/nfs_server_mount
+# mkdir -p /mnt/nfs_server_mount
 ```
-
 ### Provide R,W,E permissions to the directory for all users
 ```
-$ sudo chmod -R 777 /mnt/nfs_share
-# chmod -R 777 /mnt/nfs_share
+$ sudo chmod -R 777 /mnt/nfs_server_mount
+# chmod -R 777 /mnt/nfs_server_mount
+```
+### Configure the NFS Exports for Clients
+```
+$ sudo vim /etc/exports
+# vim /etc/exports
+```
+#### Edit the configuration based on the use case
+```
+/mnt/nfs_server_mount *(rw,sync,no_root_squash,no_subtree_check)
+/mnt/nfs_server_mount <client_ip>(rw,sync,no_root_squash,no_subtree_check)
+/mnt/nfs_server_mount <client_hostname>(rw,sync,no_root_squash,no_subtree_check)
+/mnt/nfs_server_mount *.domain(ro,async,no_root_squash,no_subtree_check)
+```
+### Export the directories in /etc/exports
+```
+$ sudo exportfs -arv
+# exportfs -arv
+```
+### Allow NFS Exports on SELinux (If SELinux is enforced)
+```
+$ sudo setsebool -P nfs_export_all_rw 1
+# setsebool -P nfs_export_all_rw 1
+```
+### Restart the service to apply changes
+```
+$ sudo systemctl restart nfs-server.service
+# systemctl restart nfs-server.service
 ```
 ---
+
 ## Allow services from Firewall
+### NFSv3
 ```
 $ sudo firewall-cmd --permanent --add-service=nfs
 $ sudo firewall-cmd --permanent --add-service=rpc-bind
@@ -40,12 +72,67 @@ $ sudo firewall-cmd --permanent --add-service=mountd
 # firewall-cmd --permanent --add-service=rpc-bind
 # firewall-cmd --permanent --add-service=mountd
 ```
-
+### NFSv4
+```
+$ sudo firewall-cmd --permanent --add-service=nfs
+# firewall-cmd --permanent --add-service=nfs
+```
 ### Reload the firewall configuration for the changes to take effect
 ```
 $ sudo firewall-cmd –-reload
 # firewall-cmd –-reload
 ```
+---
 
 
 # Client-side Configuration
+## Installing NFS Service
+### RHEL-based Systems (CentOS / Fedora / Rocky Linux / Oracle Linux / Alma Linux)
+```
+$ sudo dnf install -y nfs-utils
+# dnf install -y nfs-utils
+```
+### Debian-based Systems (Ubuntu / Kubuntu / Linux Mint)
+```
+$ sudo apt install -y nfs-common
+# apt install -y nfs-common
+```
+---
+
+## Creating a mount point
+```
+$ sudo mkdir -p /mnt/nfs_client_mount
+# mkdir -p /mnt/nfs_client_mount
+```
+---
+
+## Show the exported mounts
+```
+$ sudo showmount -e <nfs_server>
+# showmount -e <nfs_server>
+```
+### Example
+```
+$ sudo showmount -e 192.168.1.10
+# showmount -e nfs-srv.local
+```
+---
+
+## Add the NFS Directory to /etc/fstab
+### Append one of the following lines to '/etc/fstab'
+#### NFSv3
+```
+<nfs_server_ip>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs defaults,nfsvers=3,noatime,nodev,nolock 0 0
+<nfs_server_hostname>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs defaults,nfsvers=3,noatime,nodev,nolock 0 0
+```
+#### NFSv4 / NFSv4.1 / NFSv4.2
+```
+<nfs_server_ip>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs4 defaults,noatime,nodev,nolock 0 0
+<nfs_server_hostname>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs4 defaults,noatime,nodev,nolock 0 0
+
+<nfs_server_ip>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs4 defaults,nfsvers=4.1,noatime,nodev,nolock 0 0
+<nfs_server_hostname>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs4 defaults,nfsvers=4.1,noatime,nodev,nolock 0 0
+
+<nfs_server_ip>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs4 defaults,nfsvers=4.2,noatime,nodev,nolock 0 0
+<nfs_server_hostname>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs4 defaults,nfsvers=4.2,noatime,nodev,nolock 0 0
+```
