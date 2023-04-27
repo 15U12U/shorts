@@ -100,7 +100,7 @@ $ sudo mkfs.ext4 /dev/vg-pool-1/lv-linear
 ```
 ---
 ### Mount the Formatted 'Logical Volume (LV)'
-#### Append one of the following configuration lines to '/etc/fstab' (Note: Change the mounted device accordingly)
+#### Append one of the following lines to '/etc/fstab' (Note: Change the mounted device accordingly)
 ```
 /dev/<volume_group_name>/<logical_volume_name>  /mnt/nfs_share  xfs   defaults  0 0
 UUID=<Device_UUID>  /mnt/nfs_share  xfs   defaults  0 0
