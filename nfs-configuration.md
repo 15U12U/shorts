@@ -65,10 +65,10 @@ $ sudo systemctl restart nfs-server.service
 ## Allow services from Firewall
 ### NFSv3
 ```
-$ sudo firewall-cmd --permanent --add-service=nfs
+$ sudo firewall-cmd --permanent --add-service=nfs3
 $ sudo firewall-cmd --permanent --add-service=rpc-bind
 $ sudo firewall-cmd --permanent --add-service=mountd
-# firewall-cmd --permanent --add-service=nfs
+# firewall-cmd --permanent --add-service=nfs3
 # firewall-cmd --permanent --add-service=rpc-bind
 # firewall-cmd --permanent --add-service=mountd
 ```
@@ -122,6 +122,9 @@ $ sudo showmount -e 192.168.1.10
 ### Append one of the following lines to '/etc/fstab'
 #### NFSv3
 ```
+<nfs_server_ip>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs defaults,noatime,nodev,nolock 0 0
+<nfs_server_hostname>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs defaults,noatime,nodev,nolock 0 0
+
 <nfs_server_ip>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs defaults,nfsvers=3,noatime,nodev,nolock 0 0
 <nfs_server_hostname>:/mnt/nfs_server_mount /mnt/nfs_client_mount nfs defaults,nfsvers=3,noatime,nodev,nolock 0 0
 ```
