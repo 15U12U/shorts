@@ -39,11 +39,14 @@ $ sudo vim /etc/exports
 # vim /etc/exports
 ```
 #### Edit the configuration based on the use case
+> **Note**  
+> Default Options:
+> no_subtree_check, secure, ro, sync, wdelay, auth_nlm, root_squash, no_all_squash
 ```
-/mnt/nfs_server_mount *(rw,sync,no_root_squash,no_subtree_check)
-/mnt/nfs_server_mount <client_ip>(rw,sync,no_root_squash,no_subtree_check)
-/mnt/nfs_server_mount <client_hostname>(rw,sync,no_root_squash,no_subtree_check)
-/mnt/nfs_server_mount *.domain(ro,async,no_root_squash,no_subtree_check)
+/mnt/nfs_server_mount *(rw)
+/mnt/nfs_server_mount <client_ip>(rw)
+/mnt/nfs_server_mount <client_hostname>(rw)
+/mnt/nfs_server_mount *.domain(ro,all_squash)
 ```
 ### Export the directories in /etc/exports
 ```
