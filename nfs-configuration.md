@@ -36,10 +36,15 @@ vers3=no
 $ sudo mkdir -p /mnt/nfs_server_mount
 # mkdir -p /mnt/nfs_server_mount
 ```
-### Provide R,W,E permissions to the directory for all users
+### Change the ownership of the NFS Share directory to 'nobody' user
 ```
-$ sudo chmod -R 777 /mnt/nfs_server_mount
-# chmod -R 777 /mnt/nfs_server_mount
+$ sudo chown -R nobody:nobody /mnt/nfs_server_mount
+# chown -R nobody:nobody /mnt/nfs_server_mount
+```
+### Provide R,W,E permissions to the directory for 'nobody' user
+```
+$ sudo chmod -R 0750 /mnt/nfs_server_mount
+# chmod -R 0750 /mnt/nfs_server_mount
 ```
 ### Configure the NFS Exports for Clients
 #### Edit the '/etc/exports' file directly or add a file with '.exports' extention to '/etc/exports.d/' directory
