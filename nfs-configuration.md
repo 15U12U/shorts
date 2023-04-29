@@ -42,11 +42,14 @@ $ sudo chmod -R 777 /mnt/nfs_server_mount
 # chmod -R 777 /mnt/nfs_server_mount
 ```
 ### Configure the NFS Exports for Clients
+#### Edit the '/etc/exports' file directly or add a file with '.exports' extention to '/etc/exports.d/' directory
 ```
 $ sudo vim /etc/exports
 # vim /etc/exports
+$ sudo vim /etc/exports.d/<file_name>.exports
+# vim /etc/exports.d/<file_name>.exports
 ```
-#### Edit the configuration based on the use case
+#### Add the configuration based on the usecase/requirement
 > **Note**  
 > Default Options:
 > no_subtree_check, secure, ro, sync, wdelay, auth_nlm, root_squash, no_all_squash
@@ -54,7 +57,13 @@ $ sudo vim /etc/exports
 /mnt/nfs_server_mount *(rw)
 /mnt/nfs_server_mount <client_ip>(rw)
 /mnt/nfs_server_mount <client_hostname>(rw)
-/mnt/nfs_server_mount *.domain(ro,all_squash)
+
+## Example
+/mnt/nfs_server_mount 172.25.0.0/16(rw)
+/mnt/nfs_server_mount 2000:472:18:b51::/64(rw)
+/mnt/nfs_server_mount *.example.com(ro,all_squash)
+/mnt/nfs_server_mount server[0-20].example.com(ro,all_squash)
+/mnt/nfs_server_mount 172.25.0.10 *.example.com(ro,all_squash)
 ```
 ### Export the directories in /etc/exports
 ```
