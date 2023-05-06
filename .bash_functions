@@ -5,7 +5,7 @@ CENSYS_API=""
 CENSYS_KEY=""
 STALKPHISH_KEY=""
 ECHOTRAIL_KEY=""
-$PHISHTANK_USERNAME="phishtank/<change_username>"
+PHISHTANK_USERNAME=""
 PHISHTANK_KEY=""
 OTX_KEY=""
 GREYNOISE_KEY=""
@@ -131,7 +131,7 @@ function phishtank {
                 url="https://checkurl.phishtank.com/checkurl/"
                 phish_url=$(echo -n "$1" | base64 -w0)
                 curl -s -X POST "$url" \
-                     -A "$PHISHTANK_USERNAME" \
+                     -A "phishtank/$PHISHTANK_USERNAME" \
                      -d "url=$phish_url" \
                      -d "format=json" \
                      -d "app_key=$PHISHTANK_KEY" | jq '.'
