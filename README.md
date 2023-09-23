@@ -1,6 +1,8 @@
 # Shorts
 
 - [PowerShell modules](powershell-modules.md)
+- [PowerShell Execution Policy](powershell-execution-policy.md)
+- [PowerShell History](powershell-history.md)
 - [Bash functions](.bash_functions)
 - [Revamped Linux Commands](revamped-linux-cli.md)
 - [SNMP Configuration Guide](snmp-configuration.md)
