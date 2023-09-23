@@ -1,9 +1,10 @@
-# List All installed Powershell Modules
+# PowerShell Modules
+## 1. List All installed Powershell Modules
 ``` powershell
 Get-InstalledModule
 ```
 ---
-# Verify the availablility of a specific Powershell Module
+## 2. Verify the availablility of a specific Powershell Module
 ``` powershell
 Get-Module <module-name> -ListAvailable
 ```
@@ -12,7 +13,7 @@ Get-Module <module-name> -ListAvailable
 Get-Module AzureAD -ListAvailable
 ```
 ---
-# Search for a Powershell Module in the repository
+## 3. Search for a Powershell Module in the repository
 ``` powershell
 Find-module -Name <module-name>
 Find-module -Name <module-name> -Repository <repo-name>
@@ -23,7 +24,7 @@ Find-module -Name AzureAD
 Find-module -Name AzureAD -Repository psgallery
 ```
 ---
-# Install/Uninstall/Update a Powershell Module
+## 4. Install/Uninstall/Update a Powershell Module
 ``` powershell
 Install-Module -Name <module-name>
 Uninstall-Module -Name <module-name>
@@ -36,7 +37,7 @@ Uninstall-Module -Name AzureAD
 Update-Module -Name AzureAD
 ```
 ---
-# Import a Powershell Module to the current session
+## 5. Import a Powershell Module to the current session
 ``` powershell
 Import-Module -Name <module-name>
 ```
@@ -45,7 +46,7 @@ Import-Module -Name <module-name>
 Import-Module -Name AzureAD
 ```
 ---
-# View available commands of a Powershell Module
+## 6. View available commands of a Powershell Module
 ``` powershell
 Get-Command -Module <module-name>
 ``` 
