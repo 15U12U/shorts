@@ -3,17 +3,27 @@
 ```powershell
 Get-History
 ```
+### 1.1. List more details on the commands
+```ps1
+Get-History | Format-List -Property *
+```
+### 1.2. Run previously executed command by ID
+```ps1
+Invoke-History <ID>
+```
+---
 
 ## 2. Find Aliases to "Get-History" command
 ```ps1
 Get-Alias | findstr "Get-History"
 ```
+---
 
 ## 3. Locate the History file
 ```ps1
 (Get-PSReadlineOption).HistorySavePath
+Get-PSReadLineOption | select -ExpandProperty HistorySavePath
 ```
-
 ### 3.1. View the content of the History file
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath
@@ -21,9 +31,19 @@ cat (Get-PSReadlineOption).HistorySavePath
 notepad (Get-PSReadlineOption).HistorySavePath
 code (Get-PSReadlineOption).HistorySavePath
 ```
-
 ### 3.2. Copy the content to clipboard or to a file
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath | clip
 Get-Content (Get-PSReadlineOption).HistorySavePath >> file.txt
+```
+---
+
+## 4. Search History commands
+### 4.1. Backward Search
+```ps1
+CTRL+R
+```
+### 4.1. Forward Search
+```ps1
+CTRL+S
 ```
