@@ -10,6 +10,7 @@ Get-History | Format-List -Property *
 ### 1.2. Run previously executed command by ID
 ```ps1
 Invoke-History <ID>
+Invoke-History -Id <ID>
 ```
 ---
 
@@ -34,11 +35,12 @@ code (Get-PSReadlineOption).HistorySavePath
 ### 3.2. Copy the content to clipboard or to a file
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath | clip
-Get-Content (Get-PSReadlineOption).HistorySavePath >> file.txt
+Get-Content (Get-PSReadlineOption).HistorySavePath >> PS-History.txt
+Get-History | Export-CSV -Path 'PS-History.csv'
 ```
 ---
 
-## 4. Search History commands
+## 4. Search for previously executed commands
 ### 4.1. Backward Search
 ```ps1
 CTRL+R
@@ -46,4 +48,15 @@ CTRL+R
 ### 4.1. Forward Search
 ```ps1
 CTRL+S
+```
+---
+
+## 5. Clear the History
+```ps1
+Clear-History
+```
+### 5.1. Delete the History file
+```ps1
+$HistoryFilePath = (Get-PSReadLineOption).HistorySavePath
+Remove-Item -Path $HistoryFilePath -Verbose
 ```
