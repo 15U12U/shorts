@@ -18,6 +18,8 @@ Get-Alias | findstr "Get-History"
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath
 cat (Get-PSReadlineOption).HistorySavePath
+notepad (Get-PSReadlineOption).HistorySavePath
+code (Get-PSReadlineOption).HistorySavePath
 ```
 
 ### 3.2. Copy the content to clipboard or to a file
