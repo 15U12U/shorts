@@ -9,18 +9,18 @@ Get-History
 Get-Alias | findstr "Get-History"
 ```
 
-### 3. Locate the History file
+## 3. Locate the History file
 ```ps1
 (Get-PSReadlineOption).HistorySavePath
 ```
 
-#### 3.1. View the content of the History file
+### 3.1. View the content of the History file
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath
 cat (Get-PSReadlineOption).HistorySavePath
 ```
 
-#### 3.2. Copy the content to clipboard or to a file
+### 3.2. Copy the content to clipboard or to a file
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath | clip
 Get-Content (Get-PSReadlineOption).HistorySavePath >> file.txt
