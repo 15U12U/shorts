@@ -12,6 +12,61 @@ GREYNOISE_KEY=""
 RISKIQ_KEY=""
 RISKIQ_SECRET=""
 
+function python-venv {
+help="
+Usage: python-venv [OPTION] [ARGUMENT]\n
+OPTIONS:
+        -c      Create a python virtual environment
+        -C      Create and Activate a python virtual environment
+        -a      Activate the python virtual environment
+        -d      Deactivate the python virtual environment
+        -h      Print help menu\n
+EXAMPLES:
+        python-venv -c <my_python_project>
+        python-venv -C <my_python_project>
+        python-venv -a <my_python_project>
+        python-venv -d
+        python-venv -h"
+
+        if [ -z $1 ]; then
+                echo "$help"
+        else
+                OPTSTRING=":c:C:a:dh"
+
+                while getopts ${OPTSTRING} opt; do
+                  case ${opt} in
+                    c)
+                      python3 -m venv .pyvirtenv-${OPTARG}
+                      echo "Python Virtual Environment Created"
+                      ;;
+                    C)
+                      python3 -m venv .pyvirtenv-${OPTARG} && source .pyvirtenv-${OPTARG}/bin/activate
+                      echo "Python Virtual Environment Created and Activated"
+                      ;;
+                    a)
+                      source .pyvirtenv-${OPTARG}/bin/activate
+                      echo "Python Virtual Environment Activated"
+                      ;;
+                    d)
+                      source deactivate
+                      echo "Python Virtual Environment Deactivated"
+                      ;;
+                    h)
+                      echo "$help"
+                      ;;
+                    :)
+                      echo "Option -${OPTARG} requires an [ARGUMENT]"
+                      exit 1
+                      ;;
+                    ?)
+                      echo "Invalid [OPTION]: -${OPTARG}"
+                      exit 1
+                      ;;
+                  esac
+                done
+        fi
+}
+
 function myip {
         if [ -z $1 ]; then
                 url="https://ipinfo.io/"
