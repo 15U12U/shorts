@@ -1,12 +1,12 @@
 # Server-side Configuration
 ## Configuring the NFS Service
 ### Installing NFS Service
-#### RHEL-based Systems (CentOS / Fedora / Rocky Linux / Oracle Linux / Alma Linux)
+#### RHEL-based Systems (CentOS / Fedora / Rocky Linux / Oracle Linux / Alma Linux etc.)
 ```
 $ sudo dnf install -y nfs-utils
 # dnf install -y nfs-utils
 ```
-#### Debian-based Systems (Ubuntu / Kubuntu / Linux Mint)
+#### Debian-based Systems (Ubuntu / Kubuntu / Linux Mint etc.)
 ```
 $ sudo apt install -y nfs-kernel-server
 # apt install -y nfs-kernel-server
