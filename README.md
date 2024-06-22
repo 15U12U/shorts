@@ -8,4 +8,4 @@
 - [SNMP Configuration Guide](snmp-configuration.md)
 - [LVM Configuration Guide](lvm-configuration.md)
 - [NFS Configuration Guide](nfs-configuration.md)
-
+- [Logrotate Configuration Guide](logrotate-configuration.md)
