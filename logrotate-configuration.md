@@ -20,7 +20,7 @@ $ sudo apk add -y logrotate
 Create a config file (/etc/logrotate.d/example.conf) and add the following content
 ```
 /var/log/example/example.log {
-    daily                # Log files are rotated every day. Available Options: daily / weekly / monthly / yearly (Default value: weekly)
+    daily                # Log files are rotated every day (Default value: weekly). [Available Options: daily / weekly / monthly / yearly]
 }
 ```
 ---
@@ -28,9 +28,9 @@ Create a config file (/etc/logrotate.d/example.conf) and add the following conte
 Create a config file (/etc/logrotate.d/example.conf) and add the following content
 ```
 /var/log/example/example.log {
-    size 100M            # Available Options: K / M / G
-    minsize 50M          # Available Options: K / M / G
-    maxsize 200M         # Available Options: K / M / G
+    size 100M            # Log files are rotated only if they grow bigger than size bytes. [Available Options: K / M / G]
+    minsize 50M          # Log files are rotated when they grow bigger than size bytes, but not before the additionally specified time interval (daily, weekly, monthly, or yearly). [Available Options: K / M / G]
+    maxsize 200M         # Log files are rotated when they grow bigger than size bytes even before the additionally specified time interval ( daily, weekly, monthly, or yearly). [Available Options: K / M / G]
 }
 ```
 ---
@@ -38,7 +38,8 @@ Create a config file (/etc/logrotate.d/example.conf) and add the following conte
 Create a config file (/etc/logrotate.d/example.conf) and add the following content
 ```
 /var/log/example/example.log {
-    copytruncate         # Available Options: copytruncate / create (default)
+    create               # Immediately after rotation (before the postrotate script is run) the log file is created (with the same name as the log file just rotated).
+    copytruncate         # Truncate the original log file to zero size in place after creating a copy, instead of moving the old log file and optionally creating a new one. (Default value: create)
 }
 ```
 ---
@@ -48,16 +49,15 @@ Create a config file (/etc/logrotate.d/example.conf) and add the following conte
 /var/log/example/example.log {
     compress             # Old versions of log files are compressed with gzip(1) by default.
     delaycompress        # Postpone compression of the previous log file to the next rotation cycle. This only has an effect when used in combination with compress.
-    missingok            # Don’t write an error message if the log file is missing
-    notifempty           # Do not rotate the log if it is empty (Default: ifempty)
-    rotate 8             # Log files are rotated count times before being removed (Default value: 4)
-    dateext              # Archive old versions of log files adding a daily extension (Default format: YYYYMMDD)
-    dateformat -%d%m%Y   # Specify the extension for dateext using the notation similar to strftime(3) function
+    missingok            # Don’t write an error message if the log file is missing.
+    notifempty           # Do not rotate the log if it is empty (Default: ifempty).
+    rotate 8             # Log files are rotated 8 times before being removed (Default value: 4).
+    dateext              # Archive old versions of log files by adding a daily extension (Default format: YYYYMMDD).
+    dateformat -%d-%m-%Y # Specify the extension for dateext using the notation similar to strftime(3) function.
+    olddir <directory>   # Old logs are moved into the specified directory.
 }
 ```
 ---
-
-
 
 ## Example
 Create a config file (/etc/logrotate.d/nginx.conf) and add the following content
@@ -73,9 +73,10 @@ Create a config file (/etc/logrotate.d/nginx.conf) and add the following content
     sharedscripts
     dateext
     dateformat -%d%m%Y
+    olddir /var/log/nginx/old
 }
 
-/var/log/nginx/error.log {
+/var/log/nginx/error-*.log {
     weekly
     rotate 2
     missingok
@@ -84,9 +85,8 @@ Create a config file (/etc/logrotate.d/nginx.conf) and add the following content
     compress
     delaycompress
     sharedscripts
-    
+    olddir old/error
+    dateext
+    dateformat -%d-%m-%Y
 }
 ```
----
-
-
