@@ -9,3 +9,4 @@
 - [LVM Configuration Guide](lvm-configuration.md)
 - [NFS Configuration Guide](nfs-configuration.md)
 - [Logrotate Configuration Guide](logrotate-configuration.md)
+- [SSH Client Configuration Guide](ssh-client-configuration.md)
