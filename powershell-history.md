@@ -6,6 +6,7 @@ Get-History
 ### 1.1. List more details on the commands
 ```ps1
 Get-History | Format-List -Property *
+Get-History | Select-Object -Property *
 ```
 ### 1.2. Run previously executed command by ID
 ```ps1
@@ -60,12 +61,6 @@ Clear-History -CommandLine *Help*, *Syntax
 ```ps1
 $HistoryFilePath = (Get-PSReadLineOption).HistorySavePath
 Remove-Item -Path $HistoryFilePath -Verbose
-```
----
-
-## 6. Get All Object Properties
-```ps1
-Get-History | Select-Object -Property *
 ```
 ---
 
