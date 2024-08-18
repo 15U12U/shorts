@@ -32,7 +32,7 @@ cat (Get-PSReadlineOption).HistorySavePath
 notepad (Get-PSReadlineOption).HistorySavePath
 code (Get-PSReadlineOption).HistorySavePath
 ```
-### 3.2. Copy the content to clipboard or to a file
+### 3.2. Copy the content to the clipboard or a file
 ```ps1
 Get-Content (Get-PSReadlineOption).HistorySavePath | clip
 Get-Content (Get-PSReadlineOption).HistorySavePath >> PS-History.txt
@@ -54,9 +54,18 @@ CTRL+S
 ## 5. Clear the History
 ```ps1
 Clear-History
+Clear-History -CommandLine *Help*, *Syntax
 ```
 ### 5.1. Delete the History file
 ```ps1
 $HistoryFilePath = (Get-PSReadLineOption).HistorySavePath
 Remove-Item -Path $HistoryFilePath -Verbose
 ```
+---
+
+## 6. Get All Object Properties
+```ps1
+Get-History | Select-Object -Property *
+```
+---
+
